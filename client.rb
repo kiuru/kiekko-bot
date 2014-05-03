@@ -41,14 +41,9 @@ class KiekkoBot
       until @server.eof?
         begin
           response = @server.read_nonblock(1024)
-          puts "RESPONSE MSG: #{response}"
+          puts "RESPONSE MSG: #{response.inspect}"
 
-          # Should be? -> /K\*(.*)\*/ K-tag miss sometimes
-          if response =~ /K\*(.*)\*/ then
-            sender = response[/K\*(.*)\*/,1]
-            puts "Msg: *#{sender}*"
-            @server.write "z0,/msg #{sender} Hello #{sender}!\r\n"
-          end
+          methods(response)
 
           # I don't know yet how do keepalive to right
           if (i % 2) == 0
@@ -69,6 +64,31 @@ class KiekkoBot
       connect
       login
 
+    end
+
+  end
+
+  def methods(data)
+
+    # Should be? -> /K\*(.*)\*/ K-tag miss sometimes
+    # if data =~ /K\*(.*)\*/ then
+    #   sender = data[/K\*(.*)\*/,1]
+    #   message = data[/K\*(.*)\*(.*)/,2].strip
+    #   puts "Msg: *#{sender}* #{message}"
+    #   @server.write "z0,/msg #{sender} Hello #{sender}!\r\n"
+    # end
+
+    if data =~ /!hello/ then
+      sender = data[/\*(.*)\* !hello/,1]
+      puts "Command !hello: *#{sender}*"
+      @server.write "z0,/msg #{sender} Hello #{sender}!\r\n"
+    end
+
+    if data =~ /!spect/ then
+      sender = data[/\*(.*)\* !spect/,1]
+      room = data[/!spect (.*)/,1].strip
+      puts "Command *#{sender}* !spect #{room}"
+      @server.write "z0,/s #{room}\r\n"
     end
 
   end
