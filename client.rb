@@ -84,11 +84,31 @@ class KiekkoBot
       @server.write "z0,/msg #{sender} Hello #{sender}!\r\n"
     end
 
-    if data =~ /!spect/ then
+    if data =~ /!spect (.*)/ then
       sender = data[/\*(.*)\* !spect/,1]
       room = data[/!spect (.*)/,1].strip
       puts "Command *#{sender}* !spect #{room}"
       @server.write "z0,/s #{room}\r\n"
+    end
+
+    if data =~ /!join (.*)/ then
+      sender = data[/\*(.*)\* !join/,1]
+      room = data[/!join (.*)/,1].strip
+      puts "Command *#{sender}* !join #{room}"
+      @server.write "z0,/j #{room}\r\n"
+    end
+
+    if data =~ /!leave/ then
+      sender = data[/\*(.*)\* !leave/,1]
+      puts "Command *#{sender}* !leave"
+      @server.write "z0,/leave\r\n"
+    end
+
+    if data =~ /!whois (.*)/ then
+      sender = data[/\*(.*)\* !whois/,1]
+      player = data[/!whois (.*)/,1].strip
+      puts "Command *#{sender}* !whois #{player}"
+      @server.write "z0,/whois #{player}\r\n"
     end
 
   end
