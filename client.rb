@@ -3,15 +3,20 @@ require './conf.rb'
 
 class KiekkoBot
 
+  private
+  attr_accessor :host, :port
+
   def initialize(host, port)
 
-    connect(host, port)
+    self.host = host
+    self.port = port
+    connect
     login
     listen
 
   end
  
-  def connect(host, port)
+  def connect
 
     puts "DEBUG | Open conenction"
     @server = TCPSocket.open(host, port, 30)
