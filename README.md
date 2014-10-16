@@ -15,3 +15,6 @@ conf.rb
 	SERVICE_PASS = ""
 	KIEKKO_USER = ""
 	KIEKKO_PASS = ""
+
+	# kiekko.tk api url
+	KIEKKO_API = ""

@@ -1,7 +1,7 @@
 class KiekkoBot
 
   private
-  attr_accessor :host, :port, :is_admin
+  attr_accessor :host, :port, :is_admin, :server
 
   def initialize(host, port, admin = false)
 
@@ -128,6 +128,14 @@ class KiekkoBot
       nick = data[/^Y(.*)zB/,1]
       puts "[INFO] new bot: #{nick}"
       #@server.write "z0,/msg kemton new bot: #{nick}\r\n"
+    end
+
+    if data =~ /!update/ then
+      sender = data[/\*(.*)\* !update/,1]
+      response = JSON.parse( HTTParty.get( URI.parse(URI.encode("#{KIEKKO_API}user/=#{sender}?fields=id")) ) )
+      sender_kiekko_id = response["id"]
+      HTTParty.get( URI.parse(URI.encode("http://tilastot.tk/update/player/#{sender_kiekko_id}/referer}")) )
+      @server.write "z0,/msg #{sender} Your stats has updated succesfully to tilastot.tk!\r\n"
     end
 
   end
